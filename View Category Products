@@ -1,0 +1,50 @@
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import java.util.List;
+
+public class ViewCategoryProductsTest {
+    public static void main(String[] args) {
+        // Set the path to your ChromeDriver executable
+        System.setProperty("webdriver.chrome.driver", "path_to_chromedriver.exe");
+
+        // Instantiate ChromeDriver
+        WebDriver driver = new ChromeDriver();
+
+        // Navigate to the website
+        driver.get("https://automationexercise.com/");
+
+        // Locate the category link that you want to view
+        WebElement categoryLink = driver.findElement(By.linkText("Category Name"));
+        categoryLink.click();
+
+        // Verify that you are on the category page
+        String expectedTitle = "Category Name";
+        String actualTitle = driver.getTitle();
+
+        if (actualTitle.equals(expectedTitle)) {
+            System.out.println("Successfully navigated to the category page.");
+        } else {
+            System.out.println("Failed to navigate to the category page.");
+        }
+
+        // Retrieve the list of products on the category page
+        List<WebElement> productList = driver.findElements(By.xpath("//div[@class='product-item']"));
+
+        // Print the product names
+        for (WebElement product : productList) {
+            WebElement productNameElement = product.findElement(By.xpath(".//h2[@class='woocommerce-loop-product__title']"));
+            String productName = productNameElement.getText();
+            System.out.println(productName);
+        }
+
+        // Optionally, navigate to the product details page by clicking on a product
+        WebElement productToClick = productList.get(0);
+        productToClick.click();
+
+        // Close the browser
+        driver.quit();
+    }
+}
